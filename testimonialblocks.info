@@ -1,0 +1,8 @@
+name = TestimonialBlocks
+description = This module lets you create testimonials and display them as blocks on your site.
+;package = 
+core = 7.x
+;files[] = testimonialblocks.install
+;files[] = testimonialblocks.module
+;dependencies[] = autoload
+;php = 5.2

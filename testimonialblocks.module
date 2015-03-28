@@ -1,0 +1,80 @@
+<?php
+/**
+ * @file
+ * This is the main module file file
+ */
+
+/**
+ * Implements hook_help().
+ */
+function testimonialblocks_help($path, $arg) {
+
+  if ($path == 'admin/help#testimonialblocks') {
+    return t('This module lets you create and display Testimonials as blocks on your site.');
+  }
+}
+
+/**
+ * Implements hook_block_info().
+ */
+function testimonialblocks_block_info() {
+  $blocks = array();
+
+  $blocks['testimonialblocks'] = array(
+    'info' => t('A listing of all Testimonials for you site.'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+
+  return $blocks;
+}
+
+
+/**
+ * Implements hook_block_view().
+ */
+function testimonialblocks_block_view($block_name = '') {
+  if ($block_name == 'testimonialblocks') {
+
+    $type = "testimonial";
+    $nodes = node_load_multiple(array(), array('type' => $type));
+    $i = 0;
+    foreach ($nodes as $testimonials) {
+      $list[$i] = $testimonials->title;
+      $i++;
+    }
+
+    // $list[0] = $testimonials->title;
+    $theme_args = array('items' => $list, 'type' => 'ol');
+    $content = theme('item_list', $theme_args);
+
+    $block = array(
+      'subject' => t('Testimonials'),
+      'content' => $content,
+
+    );
+    return $block;
+  }
+}
+
+
+/**
+ * Implements hook_node_info().
+ */
+function testimonialblocks_node_info() {
+  return array(
+    'testimonial' => array(
+      'name' => t('Testimonial'),
+      'base' => 'testimonial',
+      'description' => t('You can define new testimonial here'),
+      'has_title' => TRUE,
+      'title_label' => t('Testimonial title'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_form().
+ */
+function testimonial_form($node, $form_state) {
+  return node_content_form($node, $form_state);
+}
